@@ -1,7 +1,7 @@
 /*
  * 如何使用多个reducer
  */
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import { logDispatch, logSubscribe } from './utils';
 
 /*

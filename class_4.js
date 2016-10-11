@@ -1,7 +1,7 @@
 /*
- * 如何形成一颗状态树
+ * 如何来写一个middleware
  */
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { logDispatch, logSubscribe } from './utils';
 
 /*
@@ -57,18 +57,35 @@ let childReducers = combineReducers({
 });
 
 /*
- * 将slice的reducer和上面的childReducer组合起来
- * 这样就形成了一颗想象中的状态树
+ * 还是将reducer注册到store中
  */
 let reducers = combineReducers({
     'root': rootSliceReducer,
     'child': childReducers
 });
 
+
 /*
- * 还是将reducer注册到store中
+ *
+ * 自己来实现一个最简单打印日志的中间件
+ *
  */
-let store = createStore(reducers);
+function logMiddleware() {
+    return () => next => action => {
+        console.log('---CustomLog : before---', action);
+        // 打印完日志后，真正执行action
+        next(action);
+        console.log('---CustomLog : after----', action);
+    };
+}
+
+/*
+ * applyMiddleware应该是属于createStore的第三个参数
+ * createStore函数里处理了参数的问题
+ * 这里必须使用redux提供的applyMiddleware方法来应用
+ * 刚才编写的logMiddleware方法。
+ */
+let store = createStore(reducers, applyMiddleware(logMiddleware()));
 let dispatch = logDispatch(store);
 logSubscribe(store);
 

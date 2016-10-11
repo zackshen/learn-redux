@@ -1,7 +1,7 @@
 /*
  * 最简单的redux编程模型
  */
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore } from 'redux';
 import { logDispatch, logSubscribe } from './utils';
 
 /*
