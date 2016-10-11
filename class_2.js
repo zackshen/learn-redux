@@ -1,13 +1,10 @@
 /*
- * 最简单的redux编程模型
+ * 如何使用多个reducer
  */
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { logDispatch, logSubscribe } from './utils';
 
-/*
- * 创建一个数字加减的reducer
- */
-function numberReducer(state = 0, action) {
+function numberReducer(state = 1, action) {
     let v = state;
     if (action.type === 'increment') {
         v += 1;
@@ -15,19 +12,28 @@ function numberReducer(state = 0, action) {
         v -= 1;
     }
 
+    return v
+}
+
+function stringReducer(state = 'hello', action) {
+    let v = action.string || state;
+    if (action.type === "lower") {
+        v = v.toLowerCase();
+    } else if (action.type === "upper") {
+        v = v.toUpperCase();
+    }
     return v;
 }
 
-/*
- * 创建一个store实例
- */
-let store = createStore(numberReducer);
+let reducers = combineReducers({
+    'number': numberReducer,
+    'string': stringReducer
+});
+
+let store = createStore(reducers);
 let dispatch = logDispatch(store);
 logSubscribe(store);
 
-/*
- * 派发各种action
- */
 dispatch({'type': 'increment'});
 dispatch({'type': 'increment'});
 dispatch({'type': 'increment'});

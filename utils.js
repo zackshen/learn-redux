@@ -4,4 +4,14 @@ let logDispatch = (store) => (action) => {
     console.log(">>>>>> Dispatch Action End <<<<<");
 };
 
-export default logDispatch;
+let logSubscribe = (store) => {
+    /*
+     * 监听状态变化
+     */
+    store.subscribe(() => {
+        console.log("===== New State =====");
+        console.log(store.getState());
+    });
+};
+
+export { logDispatch, logSubscribe };
